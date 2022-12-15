@@ -13,14 +13,14 @@ $rowsAllCount = $inputdata.Count
 #Calculate the elves
 $elvesCount = $rowsAllCount - $rowsNoBlanks
 
-Get-Content "$ENV:USERPROFILE\Desktop\day1input.txt" | Measure-Object -Line
-
-#Creates array grouping by each set of numbers seperated by blank row
-$ajr2 = (Get-Content "$ENV:USERPROFILE\Desktop\day1input.txt" -Raw) -split '(?:\r?\n){2,}'
+#Creates new array, with element of array seperated by the blank row. (gets us 1 elf)
+$splitdata = (Get-Content "$ENV:USERPROFILE\Desktop\day1input.txt" -Raw) -split '(?:\r?\n){2,}'
 
 
-foreach ($elf in $ajr2){
-    write-host $elf
+
+foreach ($elf in $splitdata){
+
+    # null out variables
     $elf2 = $null
     $caloriecount = $null
     $elf2 = $elf.Split([System.Environment]::NewLine,[System.StringSplitOptions]::RemoveEmptyEntries)
@@ -32,10 +32,18 @@ foreach ($elf in $ajr2){
         #Add up all the snacks into a total per elf
         [int]$caloriecount += $snack
         write-output "Total is [$caloriecount]"
-        #$caloriecount += $Global:Results
         }
         $Global:Results += $caloriecount
         write-output ..
     }
 
-$Global:Results | Sort -Descending | Select -First
+# Out of all elves, sort by the highest value, and select first record.
+$Global:Results | Sort -Descending | Select -First 1
+
+#Part 2
+$part2Total = $Global:Results | Sort -Descending | Select -First 3
+[int]$Global:Result2 = 0
+foreach ($elf in $part2Total){
+    $Global:Result2 += $elf
+    }
+$Global:Result2
